@@ -1,0 +1,17 @@
+apiVersion: core.spinoperator.dev/v1alpha1
+kind: SpinApp
+metadata:
+  name: hpa-spinapp
+spec:
+  image: ghcr.io/spinkube/spin-operator/cpu-load-gen:20240311-163328-g1121986
+  executor: containerd-shim-spin
+  replicas: 1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 400Mi
+  openTelemetryParams:
+    

@@ -109,6 +109,7 @@ func ConstructEnvForApp(ctx context.Context, app *spinv1alpha1.SpinApp) []corev1
 	}
 
 	envs := make([]corev1.EnvVar, len(app.Spec.Variables))
+	// Adding the Spin Variables
 	for idx, variable := range app.Spec.Variables {
 		env := corev1.EnvVar{
 			// Spin Variables only allow lowercase ascii characters, `_`, and numbers.
@@ -119,6 +120,11 @@ func ConstructEnvForApp(ctx context.Context, app *spinv1alpha1.SpinApp) []corev1
 			ValueFrom: variable.ValueFrom,
 		}
 		envs[idx] = env
+	}
+
+	// Adding the OpenTelemetry params
+	for key, value := range app.Spec.OpenTelemetryParams {
+		envs = append(envs, corev1.EnvVar{Name: key, Value: value})
 	}
 
 	return envs

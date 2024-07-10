@@ -236,6 +236,13 @@ spec:
                   type: object
                   x-kubernetes-map-type: atomic
                 type: array
+              openTelemetryParams:
+                additionalProperties:
+                  type: string
+                description: |-
+                  TODO @asteurer: The comment below needs work
+                  OpenTelemetryParams defines the OTel observability parameters
+                type: object
               podAnnotations:
                 additionalProperties:
                   type: string

@@ -80,6 +80,10 @@ type SpinAppSpec struct {
 
 	// Resources defines the resource requirements for this app.
 	Resources Resources `json:"resources,omitempty"`
+
+	// TODO @asteurer: The comment below needs work
+	// OpenTelemetryParams defines the OTel observability parameters
+	OpenTelemetryParams map[string]string `json:"openTelemetryParams,omitempty"`
 }
 
 // SpinAppStatus defines the observed state of SpinApp
