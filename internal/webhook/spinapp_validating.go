@@ -2,6 +2,7 @@ package webhook
 
 import (
 	"context"
+	"fmt"
 
 	spinv1alpha1 "github.com/spinkube/spin-operator/api/v1alpha1"
 	"github.com/spinkube/spin-operator/internal/logging"
@@ -61,6 +62,9 @@ func (v *SpinAppValidator) validateSpinApp(ctx context.Context, spinApp *spinv1a
 	if err := validateReplicas(spinApp.Spec); err != nil {
 		allErrs = append(allErrs, err)
 	}
+	if err := validateOpenTelemetryParams(spinApp.Spec); err != nil {
+		allErrs = append(allErrs, err)
+	}
 	if err := validateAnnotations(spinApp.Spec, executor); err != nil {
 		allErrs = append(allErrs, err)
 	}
@@ -109,6 +113,18 @@ func validateReplicas(spec spinv1alpha1.SpinAppSpec) *field.Error {
 	}
 	if !spec.EnableAutoscaling && spec.Replicas < 1 {
 		return field.Invalid(field.NewPath("spec").Child("replicas"), spec.Replicas, "replicas must be > 0")
+	}
+
+	return nil
+}
+
+func validateOpenTelemetryParams(spec spinv1alpha1.SpinAppSpec) *field.Error {
+	// TODO @asteurer: Where is the list going to be stored for approved open telemetry params?
+	// TODO @asteurer: Create a test for this
+	for key, _ := range spec.OpenTelemetryParams {
+		if key != "OTEL_EXPORTER_OTLP_ENDPOINT" {
+			return field.Invalid(field.NewPath("spec").Child("openTelemetryParams"), spec.OpenTelemetryParams, fmt.Sprintf("the open telemetry parameter %s is not supported", key))
+		}
 	}
 
 	return nil
