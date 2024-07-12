@@ -16,3 +16,4 @@ spec:
   otel:
     - name: OTEL_EXPORTER_OTLP_ENDPOINT
       value: http://otel-collector-opentelemetry-collector.default.svc.cluster.local:4318
+      
