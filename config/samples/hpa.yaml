@@ -32,5 +32,3 @@ spec:
       target:
         type: Utilization
         averageUtilization: 50
-  openTelemetryParams:
-    OTEL_EXPORTER_OTLP_ENDPOINT: 

@@ -119,11 +119,19 @@ func validateReplicas(spec spinv1alpha1.SpinAppSpec) *field.Error {
 }
 
 func validateOpenTelemetryParams(spec spinv1alpha1.SpinAppSpec) *field.Error {
-	// TODO @asteurer: Where is the list going to be stored for approved open telemetry params?
-	// TODO @asteurer: Create a test for this
-	for key, _ := range spec.OpenTelemetryParams {
-		if key != "OTEL_EXPORTER_OTLP_ENDPOINT" {
-			return field.Invalid(field.NewPath("spec").Child("openTelemetryParams"), spec.OpenTelemetryParams, fmt.Sprintf("the open telemetry parameter %s is not supported", key))
+	// TODO: This doesn't appear to be properly validating when I include keys that are not on the list, and I'm not sure why
+	approvedOtelParams := []string{"OTEL_EXPORTER_OTLP_ENDPOINT"}
+
+	for _, entry := range spec.Otel {
+		paramMatches := false
+		for _, approvedParam := range approvedOtelParams {
+			if entry.Name == approvedParam {
+				paramMatches = true
+			}
+		}
+
+		if !paramMatches {
+			return field.Invalid(field.NewPath("spec").Child("otel"), spec.Otel, fmt.Sprintf("the otel variable '%s' is not currently supported", entry.Name))
 		}
 	}
 

@@ -104,10 +104,6 @@ func ConstructVolumeMountsForApp(ctx context.Context, app *spinv1alpha1.SpinApp,
 // ConstructEnvForApp constructs the env for a spin app that runs as a k8s pod.
 // Variables are not guaranteed to stay backed by ENV.
 func ConstructEnvForApp(ctx context.Context, app *spinv1alpha1.SpinApp) []corev1.EnvVar {
-	if len(app.Spec.Variables) == 0 {
-		return nil
-	}
-
 	envs := make([]corev1.EnvVar, len(app.Spec.Variables))
 	// Adding the Spin Variables
 	for idx, variable := range app.Spec.Variables {
@@ -123,8 +119,12 @@ func ConstructEnvForApp(ctx context.Context, app *spinv1alpha1.SpinApp) []corev1
 	}
 
 	// Adding the OpenTelemetry params
-	for key, value := range app.Spec.OpenTelemetryParams {
-		envs = append(envs, corev1.EnvVar{Name: key, Value: value})
+	for _, entry := range app.Spec.Otel {
+		envs = append(envs, corev1.EnvVar{Name: entry.Name, Value: entry.Value, ValueFrom: entry.ValueFrom})
+	}
+
+	if len(envs) == 0 {
+		return nil
 	}
 
 	return envs
