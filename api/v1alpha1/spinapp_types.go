@@ -80,9 +80,6 @@ type SpinAppSpec struct {
 
 	// Resources defines the resource requirements for this app.
 	Resources Resources `json:"resources,omitempty"`
-
-	// Otel provides Kubernetes Bindings to Otel Variables.
-	Otel []OtelVar `json:"otel,omitempty"`
 }
 
 // SpinAppStatus defines the observed state of SpinApp
@@ -193,21 +190,6 @@ type RuntimeConfigVarSource struct {
 // SpinVar defines a binding between a spin variable and a static or dynamic value.
 type SpinVar struct {
 	// Name of the variable to bind.
-	Name string `json:"name"`
-
-	// Value is the static value to bind to the variable.
-	//
-	// +optional
-	Value string `json:"value,omitempty"`
-
-	// ValueFrom is a reference to dynamically bind the variable to.
-	//
-	// +optional
-	ValueFrom *corev1.EnvVarSource `json:"valueFrom,omitempty"`
-}
-
-type OtelVar struct {
-	// Name of the Otel variable to bind.
 	Name string `json:"name"`
 
 	// Value is the static value to bind to the variable.

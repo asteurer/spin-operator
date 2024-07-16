@@ -2,7 +2,6 @@ package webhook
 
 import (
 	"context"
-	"fmt"
 
 	spinv1alpha1 "github.com/spinkube/spin-operator/api/v1alpha1"
 	"github.com/spinkube/spin-operator/internal/logging"
@@ -62,9 +61,6 @@ func (v *SpinAppValidator) validateSpinApp(ctx context.Context, spinApp *spinv1a
 	if err := validateReplicas(spinApp.Spec); err != nil {
 		allErrs = append(allErrs, err)
 	}
-	if err := validateOpenTelemetryParams(spinApp.Spec); err != nil {
-		allErrs = append(allErrs, err)
-	}
 	if err := validateAnnotations(spinApp.Spec, executor); err != nil {
 		allErrs = append(allErrs, err)
 	}
@@ -113,26 +109,6 @@ func validateReplicas(spec spinv1alpha1.SpinAppSpec) *field.Error {
 	}
 	if !spec.EnableAutoscaling && spec.Replicas < 1 {
 		return field.Invalid(field.NewPath("spec").Child("replicas"), spec.Replicas, "replicas must be > 0")
-	}
-
-	return nil
-}
-
-func validateOpenTelemetryParams(spec spinv1alpha1.SpinAppSpec) *field.Error {
-	// TODO: This doesn't appear to be properly validating when I include keys that are not on the list, and I'm not sure why
-	approvedOtelParams := []string{"OTEL_EXPORTER_OTLP_ENDPOINT"}
-
-	for _, entry := range spec.Otel {
-		paramMatches := false
-		for _, approvedParam := range approvedOtelParams {
-			if entry.Name == approvedParam {
-				paramMatches = true
-			}
-		}
-
-		if !paramMatches {
-			return field.Invalid(field.NewPath("spec").Child("otel"), spec.Otel, fmt.Sprintf("the otel variable '%s' is not currently supported", entry.Name))
-		}
 	}
 
 	return nil
