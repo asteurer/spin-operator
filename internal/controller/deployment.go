@@ -119,8 +119,9 @@ func ConstructEnvForApp(ctx context.Context, app *spinv1alpha1.SpinApp, otel spi
 	}
 
 	// Adding the OpenTelemetry params
-	otelVars := []corev1.EnvVar{{Name: "OTEL_EXPORTER_OTLP_ENDPOINT", Value: otel.Endpoint}}
-	envs = append(envs, otelVars...)
+	if otel.Endpoint != "" {
+		envs = append(envs, corev1.EnvVar{Name: "OTEL_EXPORTER_OTLP_ENDPOINT", Value: otel.Endpoint})
+	}
 
 	return envs
 }

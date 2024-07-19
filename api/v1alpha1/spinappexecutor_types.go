@@ -59,7 +59,7 @@ type SpinAppExecutorStatus struct {
 	// Important: Run "make" to regenerate code after modifying this file
 }
 
-// OtelConfig is the supported environment variables for Open Telemetry
+// OtelConfig is the supported environment variables for OpenTelemetry
 type OtelConfig struct {
 	Endpoint string `json:"endpoint"`
 }
