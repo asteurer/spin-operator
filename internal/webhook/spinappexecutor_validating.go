@@ -65,8 +65,11 @@ func (v *SpinAppExecutorValidator) validateSpinAppExecutor(executor *spinv1alpha
 }
 
 func validateOpenTelemetry(deployment spinv1alpha1.ExecutorDeploymentConfig) *field.Error {
-	if deployment.Otel.Endpoint == "" {
-		return field.NotFound(field.NewPath("otel"), deployment.Otel.Endpoint)
+	// Only performing validations if the OTel field is initialized
+	if deployment.Otel != nil {
+		if deployment.Otel.Endpoint == "" {
+			return field.NotFound(field.NewPath("otel"), deployment.Otel.Endpoint)
+		}
 	}
 
 	return nil

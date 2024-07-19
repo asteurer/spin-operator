@@ -150,7 +150,7 @@ func TestConstructEnvForApp(t *testing.T) {
 				},
 			}
 
-			envs := ConstructEnvForApp(context.Background(), app, spinv1alpha1.OtelConfig{Endpoint: test.otelEndpointValue})
+			envs := ConstructEnvForApp(context.Background(), app, &spinv1alpha1.OtelConfig{Endpoint: test.otelEndpointValue})
 
 			require.Equal(t, test.expectedEnvName, envs[0].Name)
 			require.Equal(t, test.value, envs[0].Value)

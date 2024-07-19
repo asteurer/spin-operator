@@ -103,7 +103,7 @@ func ConstructVolumeMountsForApp(ctx context.Context, app *spinv1alpha1.SpinApp,
 
 // ConstructEnvForApp constructs the env for a spin app that runs as a k8s pod.
 // Variables are not guaranteed to stay backed by ENV.
-func ConstructEnvForApp(ctx context.Context, app *spinv1alpha1.SpinApp, otel spinv1alpha1.OtelConfig) []corev1.EnvVar {
+func ConstructEnvForApp(ctx context.Context, app *spinv1alpha1.SpinApp, otel *spinv1alpha1.OtelConfig) []corev1.EnvVar {
 	envs := make([]corev1.EnvVar, len(app.Spec.Variables))
 	// Adding the Spin Variables
 	for idx, variable := range app.Spec.Variables {

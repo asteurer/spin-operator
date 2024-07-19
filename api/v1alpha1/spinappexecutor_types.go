@@ -50,7 +50,7 @@ type ExecutorDeploymentConfig struct {
 	InstallDefaultCACerts bool `json:"installDefaultCACerts,omitempty"`
 
 	// Otel provides Kubernetes Bindings to Otel Variables.
-	Otel OtelConfig `json:"otel,omitempty"`
+	Otel *OtelConfig `json:"otel,omitempty"`
 }
 
 // SpinAppExecutorStatus defines the observed state of SpinAppExecutor
